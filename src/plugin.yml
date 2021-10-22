@@ -1,0 +1,8 @@
+name: GuessTheNumber
+main: Main.guessMain
+version: 1.0
+api-version: 1.13
+commands:
+        guess:
+          aliases: [g]
+          description: Guess a random number.
