@@ -1,8 +1,5 @@
-name: GuessTheNumber
-main: Main.guessMain
+name: SignApi
+author: OfficerYoda
+main: de.officeryoda.api.SignApi
 version: 1.0
-api-version: 1.13
-commands:
-        guess:
-          aliases: [g]
-          description: Guess a random number.
+api-version: 1.18
