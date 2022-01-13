@@ -29,7 +29,7 @@ public class SignApi extends JavaPlugin implements Listener{
 		Bukkit.getServer().getPluginManager().registerEvents(this, instance);
 	}
 	
-	public static Map<Location, Material> openNewSign(Player player, String line0, String line1, String line2, String line3) throws InterruptedException {
+	public static Map<Location, Material> openNewSign(Player player, String line0, String line1, String line2, String line3) {
 		Map<Location, Material> returnValue = new HashMap<>();
 		Location goodLoc = getSaveLocation(player); //get good location
 
@@ -57,10 +57,10 @@ public class SignApi extends JavaPlugin implements Listener{
 		return returnValue;
 	}
 
-	public static Map<Location, Material> openNewSign(Player player, String[] lines) throws InterruptedException {
+	public static Map<Location, Material> openNewSign(Player player, String[] lines) {
 		Map<Location, Material> returnValue = new HashMap<>();
 		Location goodLoc = getSaveLocation(player); //get good location
-
+		
 		Block block = goodLoc.getWorld().getBlockAt(goodLoc);
 		Material material = block.getType();
 		block.setType(Material.OAK_SIGN);
@@ -85,29 +85,28 @@ public class SignApi extends JavaPlugin implements Listener{
 		return returnValue;
 	}
 
-	public static void openSign(Player player, Sign sign) {
+	public static void openExistingSign(Player player, Sign sign) {
 		player.openSign(sign);
 	}
 
 	private static Location getSaveLocation(Player player) {
-		Location goodLoc = searchForGoodLocation(player.getLocation(), player.getClientViewDistance());
+		Location goodLoc = searchForGoodLocation(player.getLocation());
+		goodLoc.setYaw(0);
+		goodLoc.setPitch(0);
 		if(goodLoc == null || goodLoc.equals(null)) {
 			Location playerLoc = player.getLocation();
 			playerLoc.setX(playerLoc.getBlockX());
 			playerLoc.setY(-64);	//if save location was found near the player its using block directly under the player
 			playerLoc.setZ(playerLoc.getBlockZ());
 			
-			goodLoc.setYaw(0);
-			goodLoc.setPitch(0);
-			
 			return playerLoc;
 		}
 		return goodLoc;
 	}
 
-	private static Location searchForGoodLocation(Location startLocation, int viewDistance) {
+	private static Location searchForGoodLocation(Location startLocation) {
 		Location location = startLocation;
-		int renderDistance = (viewDistance * 16) - 10 > 100 ? (viewDistance * 16) - 10 : 100; //-10 for safety reasons
+		int renderDistance = 100;
 		
 		int startX = location.getBlockX();
 		int startZ = location.getBlockZ();
@@ -137,9 +136,8 @@ public class SignApi extends JavaPlugin implements Listener{
 		Location location = event.getBlock().getLocation();
 		if(!signs.containsKey(location))
 			return;
-
 		location.getWorld().getBlockAt(location).setType(signs.get(location));
-		signs.remove(location);
+		signs.remove(location, signs.get(location));
 	}
 	
 	private static void addSignMaterial(Location location, Material material) {
