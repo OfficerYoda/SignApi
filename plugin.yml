@@ -1,5 +1,5 @@
 name: SignApi
 author: OfficerYoda
-main: de.officeryoda.api.SignApi
+main: de.officeryoda.SignApi
 version: 1.0
 api-version: 1.18
